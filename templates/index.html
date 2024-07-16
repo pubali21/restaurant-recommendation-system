@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restaurant Recommendation System</title>
+  <link rel="icon" href="https://tse1.mm.bing.net/th?id=OIP.6Gas6QYCJ48ueqVcsDYfUAAAAA&pid=Api&P=0&h=180">
+  <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js">   
+  </script>   
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js">   
+  </script>   
+  <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css"
+        rel="stylesheet" type="text/css" /> 
+</head>
+<body>
+  <header>
+    <div class="img-container">
+      <img src="https://www.herofincorp.com/public/admin_assets/upload/blog/64b91a06ab1c8_food%20business%20ideas.webp" alt="image">
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+      <div class="container-fluid">
+        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">About Us</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Get Recommendation</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="text-center app-name fs-1 fw-bold">
+      <p>Restaurant Recommendation System</p>
+    </div>
+    <div class="recommend">
+      <form action="/recommend" class="d-flex" role="search" method="POST">
+        <input name="user_input" class="search" type="text" placeholder="Search Your Restaurant" aria-label="Search" id="searchRestro">
+        <button type="submit" class="btn btn-warning search-btn">Find Restaurant</button>
+      </form>
+    </div>
+    <script>
+      $( function() { 
+        let restroNames = [ 
+            {% for restroName in all_restro_names %} 
+                "{{restroName}}", 
+            {% endfor %} 
+        ]; 
+        $( "#searchRestro" ).autocomplete({ 
+          source: restroNames 
+        }); 
+      } ); 
+    </script>
+    {% if searched_restro %}
+    <div class="card-body m-5">
+      <div class="row g-0">
+        <div class="col-md-4">
+          <img class="card-img-top-search" src="{{searched_restro[5]}}">
+        </div>
+        <div class="col-md-8 px-4">
+          <h3 class="card-title">{{searched_restro[0]}}</h3>
+          <p class="card-text">{{searched_restro[1]}}</p>
+          <p class="card-text">Available Cuisines: {{searched_restro[2]}}</p>
+          <p class="card-text">Average Rating: <small class="text-body-secondary">{{searched_restro[3]}}<span class="material-symbols-outlined">star</span></small></p>
+          <p class="card-text">Average Cost: Rs.{{searched_restro[4]}}</p>
+        </div>
+      </div>
+    </div>
+    {% endif %} 
+  
+    <div class="recommendation">
+      {% if data %}
+      <h2 class="header">Recommended Restaurants Based on your Search</h2>
+        {% for i in data %}
+          <div class="card m-2 restro-card">
+            <div class="row g-0">
+              <img class="card-img-top" src="{{i[5]}}">
+            </div>
+            <div class="row g-0">
+              <div class="card-body">
+                <div class="row g-0">
+                  <div class="col-md-9">
+                    <h5 class="card-title">{{i[0]}}</h5>
+                  </div>
+                  <div class="col-md-3">
+                    <p class="card-text star-para">{{i[3]}}<span class="material-symbols-outlined">star</span></p>
+                  </div>
+                </div>
+                <div class="row g-0">
+                  <p class="card-text">{{i[1]}}</p>
+                  <div class="card-text">{{i[2]}}</div>
+                  <div class="card-text">Average Cost: Rs.{{i[4]}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}   
+    </div>
+    <div class="restro mt-5">
+      <h2 class="header">Top Rated 50 Restaurants</h2>
+        {% for i in range(restro_name|length) %}
+          <div class="card my-3 mx-2 restro-card-top-50">
+            <div class="row g-0">
+              <img class="card-img-top" src="{{image_name[i]}}">
+            </div>
+            <div class="row g-0">
+              <div class="card-body">
+                <div class="row g-0">
+                  <div class="col-md-9">
+                    <h5 class="card-title">{{restro_name[i]}}</h5>
+                  </div>
+                  <div class="col-md-3">
+                    <p class="card-text star-para">{{ratings[i]}}<span class="material-symbols-outlined">star</span></p>
+                  </div>
+                </div>
+                <div class="row g-0">
+                  <p class="card-text">{{area_name[i]}}</p>
+                  <div class="card-text">{{cuisine_name[i]}}</div>
+                  <div class="card-text">Average Cost: Rs.{{cost[i]}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+   </div>
+    <footer class="footer text-center p-2">
+      <h3 class="py-3">About Us</h3>
+      <h6>A Content Based Recommendation System - Your go-to destination for discovering the best dining experiences tailored just for you. </h6>
+      <div class="py-2">With the burgeoning diversity of culinary offerings and the exponential growth of the restaurant industry, choosing the perfect dining spot has become a daunting task for individuals seeking memorable gastronomic experiences. Recognizing the need for intelligent solutions to navigate this abundance of options, we introduce a cutting-edge Restaurant Recommendation System.</div>
+      <div class="py-2">This system harnesses the power of advanced machine learning algorithms and user profiling to streamline the decision-making process, providing tailored suggestions that align with individual preferences. In an era where personalization and convenience are paramount, our system aims to revolutionize the way people discover, explore, and indulge in diverse culinary delights.</div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"              integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">       
+    </script>
+</body>
+</html>
