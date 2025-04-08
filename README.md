@@ -1,7 +1,7 @@
 # Restaurant Recommendation System
 A Content-Based Filtering web application that recommends restaurants to users based on their input preferences. 
 
-🚀 Features
+# Features
 ✅ Restaurant recommendation based on user-input preferences (e.g., cuisine, location, budget)
 
 ✅ Uses CountVectorizer and Cosine Similarity for content-based filtering
@@ -12,7 +12,7 @@ A Content-Based Filtering web application that recommends restaurants to users b
 
 ✅ CSV-based data source (no external database needed)
 
-🛠️ Tech Stack
+# Tech Stack
 Frontend: HTML, CSS, Bootstrap, JavaScript
 
 Backend: Python, Flask
